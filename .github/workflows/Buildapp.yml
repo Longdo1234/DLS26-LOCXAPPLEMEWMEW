@@ -1,1 +1,126 @@
+name: Build APK
 
+on:
+  workflow_dispatch:
+    inputs:
+      run_tests:
+        description: "Chạy ApkEngineSelfTest sau khi build?"
+        type: boolean
+        default: true
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - "**.zip"
+
+env:
+  BUILD_TOOLS: "36.0.0"
+  PLATFORM: "android-36"
+  KS_ALIAS: "applemewmew"
+  # Mặc định lấy từ build-apk.ps1. Nên chuyển sang GitHub Secrets: KS_PASS
+  KS_PASS: ${{ secrets.KS_PASS || 'AppleMewMew2026!' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Tìm thư mục dự án (chứa AndroidManifest.xml)
+        run: |
+          set -euo pipefail
+          MANIFEST=$(find . -name AndroidManifest.xml -not -path './.git/*' -not -path '*/build/*' | head -n1)
+          test -n "$MANIFEST" || { echo "::error::Chưa có mã nguồn. Hãy chạy workflow 'Unzip source' trước."; exit 1; }
+          PROJ=$(cd "$(dirname "$MANIFEST")" && pwd)
+          echo "PROJ=$PROJ" >> "$GITHUB_ENV"
+          echo "Dự án: $PROJ"
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Cài Android SDK (platform + build-tools)
+        run: |
+          set -euo pipefail
+          SDKM="$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKM" --licenses > /dev/null || true
+          "$SDKM" --install "platforms;${PLATFORM}" "build-tools;${BUILD_TOOLS}"
+          echo "ANDROID_JAR=$ANDROID_HOME/platforms/${PLATFORM}/android.jar" >> "$GITHUB_ENV"
+          echo "BT=$ANDROID_HOME/build-tools/${BUILD_TOOLS}" >> "$GITHUB_ENV"
+
+      - name: "[1/6] Biên dịch tài nguyên (aapt2)"
+        run: |
+          set -euo pipefail
+          B="$PROJ/build"; rm -rf "$B"
+          mkdir -p "$B"/{res_flat,gen,classes,dex,test_classes}
+          "$BT/aapt2" compile --dir "$PROJ/res" -o "$B/res_flat/res.zip"
+          "$BT/aapt2" link -o "$B/unaligned.apk" \
+            -I "$ANDROID_JAR" \
+            --manifest "$PROJ/AndroidManifest.xml" \
+            -A "$PROJ/assets" \
+            --java "$B/gen" \
+            "$B/res_flat/res.zip"
+
+      - name: "[2/6] Biên dịch Java 17 (javac)"
+        run: |
+          set -euo pipefail
+          B="$PROJ/build"
+          find "$B/gen" "$PROJ/src" -name '*.java' > "$B/sources.txt"
+          javac --release 17 -encoding UTF-8 -classpath "$ANDROID_JAR" -d "$B/classes" @"$B/sources.txt"
+
+      - name: "[3/6] Chuyển sang DEX (d8, min-api 26)"
+        run: |
+          set -euo pipefail
+          B="$PROJ/build"
+          find "$B/classes" -name '*.class' > "$B/classes.txt"
+          "$BT/d8" --min-api 26 --lib "$ANDROID_JAR" --output "$B/dex" @"$B/classes.txt"
+
+      - name: "[4/6] Đóng gói classes.dex + zipalign"
+        run: |
+          set -euo pipefail
+          B="$PROJ/build"
+          (cd "$B/dex" && zip -q "$B/unaligned.apk" classes.dex)
+          "$BT/zipalign" -f -p 4 "$B/unaligned.apk" "$B/aligned.apk"
+          unzip -l "$B/aligned.apk" | grep -E 'assets/templates/.+\.png' | head -n 3
+
+      - name: "[5/6] Ký APK (V1 + V2 + V3) và verify"
+        run: |
+          set -euo pipefail
+          B="$PROJ/build"
+          "$BT/apksigner" sign \
+            --ks "$PROJ/keystore/applemewmew.jks" \
+            --ks-key-alias "$KS_ALIAS" \
+            --ks-pass "pass:$KS_PASS" \
+            --key-pass "pass:$KS_PASS" \
+            --v1-signing-enabled true \
+            --v2-signing-enabled true \
+            --v3-signing-enabled true \
+            --out "$GITHUB_WORKSPACE/DLS_Auto_AppleMewMew.apk" \
+            "$B/aligned.apk"
+          "$BT/apksigner" verify -v --print-certs "$GITHUB_WORKSPACE/DLS_Auto_AppleMewMew.apk"
+
+      - name: "[6/6] Chạy ApkEngineSelfTest"
+        if: ${{ inputs.run_tests != false }}
+        run: |
+          set -euo pipefail
+          B="$PROJ/build"
+          keytool -exportcert -keystore "$PROJ/keystore/applemewmew.jks" \
+            -alias "$KS_ALIAS" -storepass "$KS_PASS" -file "$B/cert.der"
+
+          mkdir -p "$B/test_src"
+          sed -e "s#D:/DLS25/dls-auto-apk#$PROJ#g" \
+              -e "s#D:/DLS25/dls26-auto/captures/latest-studio.png#/nonexistent/latest-studio.png#g" \
+              "$PROJ/test/ApkEngineSelfTest.java" > "$B/test_src/ApkEngineSelfTest.java"
+
+          javac --release 17 -encoding UTF-8 \
+            -classpath "$B/classes:$ANDROID_JAR" -d "$B/test_classes" "$B/test_src/ApkEngineSelfTest.java"
+          java -Djava.awt.headless=true -ea \
+            -classpath "$B/test_classes:$B/classes:$ANDROID_JAR" ApkEngineSelfTest "$B/cert.der"
+
+      - name: Tải APK lên Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: DLS_Auto_AppleMewMew
+          path: DLS_Auto_AppleMewMew.apk
+          if-no-files-found: error
