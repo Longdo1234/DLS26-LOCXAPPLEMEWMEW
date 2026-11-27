@@ -1,0 +1,52 @@
+name: Unzip source
+
+on:
+  workflow_dispatch:
+    inputs:
+      zip_path:
+        description: "Đường dẫn file zip trong repo"
+        required: true
+        default: "ma_nguon_apk.zip"
+      delete_zip:
+        description: "Xóa file zip sau khi giải nén?"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Giải nén
+        env:
+          ZIP_PATH: ${{ inputs.zip_path }}
+        run: |
+          set -euo pipefail
+          test -f "$ZIP_PATH" || { echo "::error::Không thấy $ZIP_PATH trong repo"; exit 1; }
+          unzip -l "$ZIP_PATH" | tail -n 3
+          unzip -q -o "$ZIP_PATH" -d .
+          echo "--- Các thư mục chứa AndroidManifest.xml ---"
+          find . -name AndroidManifest.xml -not -path './.git/*'
+
+      - name: Xóa file zip (tùy chọn)
+        if: ${{ inputs.delete_zip }}
+        env:
+          ZIP_PATH: ${{ inputs.zip_path }}
+        run: git rm -q --cached "$ZIP_PATH" && rm -f "$ZIP_PATH"
+
+      - name: Commit mã nguồn đã giải nén
+        run: |
+          set -euo pipefail
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Không có thay đổi để commit."
+          else
+            git commit -m "chore: giải nén mã nguồn từ ${{ inputs.zip_path }}"
+            git push
+          fi
