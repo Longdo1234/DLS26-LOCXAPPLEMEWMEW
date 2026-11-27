@@ -1,0 +1,188 @@
+{
+  "run": {
+    "mode": "career",
+    "maxMatches": 100,
+    "loopIntervalMs": 390,
+    "fastSkipIntervalMs": 450,
+    "jitterPx": 3,
+    "keepScreenAwake": true,
+    "autoSnapGlyphButtons": true,
+    "safeMarginOverridePx": -1
+  },
+  "gameplay": {
+    "style": "smart_radar",
+    "actionCooldownMs": 360,
+    "skipReplayIntervalMs": 480
+  },
+  "controls": {
+    "calibratedOnPhone": false,
+    "calibratedNormW": 1280,
+    "joystick": { "x": 164, "y": 546, "radius": 78 },
+    "buttonB": { "x": 1046, "y": 652 },
+    "buttonA": { "x": 1197, "y": 652 },
+    "buttonC": { "x": 1197, "y": 486 },
+    "skipTap": { "x": 640, "y": 250 }
+  },
+  "templates": {
+    "online_live_guard": {
+      "label": "Chốt chặn Online (Dream League Live - Tự dừng)",
+      "file": "online_live_guard.png",
+      "anchor": "CENTER",
+      "phoneNative": false,
+      "roi": { "x": 0, "y": 0, "w": 1280, "h": 180 },
+      "threshold": 0.86,
+      "maxColorDiff": 45,
+      "tapOffset": { "dx": 0, "dy": 0 }
+    },
+    "replay_exit": {
+      "label": "Nút < góc trên trái thoát Replay",
+      "file": "replay_exit.png",
+      "anchor": "LEFT",
+      "phoneNative": false,
+      "roi": { "x": 0, "y": 0, "w": 95, "h": 90 },
+      "threshold": 0.80,
+      "maxColorDiff": 52,
+      "tapOffset": { "dx": 0, "dy": 0 }
+    },
+    "popup_close": {
+      "label": "Nút Đóng / OK bảng thông báo phụ",
+      "file": "popup_close.png",
+      "anchor": "CENTER",
+      "phoneNative": false,
+      "roi": { "x": 220, "y": 100, "w": 840, "h": 540 },
+      "threshold": 0.83,
+      "maxColorDiff": 50,
+      "tapOffset": { "dx": 0, "dy": 0 }
+    },
+    "sub_confirm": {
+      "label": "Nút Xác nhận thay người (Thẻ đỏ / Chấn thương)",
+      "file": "sub_confirm.png",
+      "anchor": "RIGHT",
+      "phoneNative": false,
+      "roi": { "x": 680, "y": 480, "w": 580, "h": 230 },
+      "threshold": 0.83,
+      "maxColorDiff": 50,
+      "tapOffset": { "dx": 0, "dy": 0 }
+    },
+    "half_time_resume": {
+      "label": "Đồng hồ 45:00 Nghỉ giữa hiệp -> Bấm Tiếp tục Hiệp 2",
+      "file": "half_time_resume.png",
+      "anchor": "CENTER",
+      "phoneNative": false,
+      "roi": { "x": 565, "y": 55, "w": 150, "h": 85 },
+      "threshold": 0.80,
+      "maxColorDiff": 52,
+      "tapOffset": { "dx": 259, "dy": 507 }
+    },
+    "pause_resume": {
+      "label": "Nút RESUME khi game tạm dừng (Pause Menu)",
+      "file": "pause_resume.png",
+      "anchor": "CENTER",
+      "phoneNative": false,
+      "roi": { "x": 610, "y": 525, "w": 200, "h": 155 },
+      "threshold": 0.80,
+      "maxColorDiff": 52,
+      "tapOffset": { "dx": 190, "dy": 0 }
+    },
+    "post_match_continue": {
+      "label": "Nút CONTINUE góc dưới phải sau trận đấu",
+      "file": "post_match_continue.png",
+      "anchor": "RIGHT",
+      "phoneNative": false,
+      "roi": { "x": 965, "y": 585, "w": 315, "h": 135 },
+      "threshold": 0.78,
+      "maxColorDiff": 52,
+      "tapOffset": { "dx": 0, "dy": 0 }
+    },
+    "pre_match_play": {
+      "label": "Nút PLAY xanh lá trước trận (Chọn áo / Đội hình)",
+      "file": "pre_match_play.png",
+      "anchor": "RIGHT",
+      "phoneNative": false,
+      "roi": { "x": 1040, "y": 590, "w": 240, "h": 130 },
+      "threshold": 0.72,
+      "maxColorDiff": 55,
+      "tapOffset": { "dx": 0, "dy": 0 }
+    },
+    "lobby_play": {
+      "label": "Thẻ PLAY NOW vào trận từ sảnh Career / Exhibition",
+      "file": "lobby_play.png",
+      "anchor": "LEFT",
+      "phoneNative": false,
+      "roi": { "x": 8, "y": 100, "w": 190, "h": 145 },
+      "threshold": 0.75,
+      "maxColorDiff": 55,
+      "tapOffset": { "dx": 220, "dy": 120 }
+    },
+    "home_career": {
+      "label": "Thẻ CAREER trên màn hình chính Home DLS",
+      "file": "home_career.png",
+      "anchor": "LEFT",
+      "phoneNative": false,
+      "roi": { "x": 8, "y": 100, "w": 235, "h": 105 },
+      "threshold": 0.78,
+      "maxColorDiff": 52,
+      "tapOffset": { "dx": 180, "dy": 120 }
+    },
+    "start_new_division": {
+      "label": "Thẻ START NEW DIVISION tự qua mùa giải mới (khi treo 100 trận)",
+      "file": "start_new_division.png",
+      "anchor": "LEFT",
+      "phoneNative": false,
+      "roi": { "x": 8, "y": 100, "w": 330, "h": 105 },
+      "threshold": 0.76,
+      "maxColorDiff": 52,
+      "tapOffset": { "dx": 150, "dy": 120 }
+    },
+    "nav_back": {
+      "label": "Nút mũi tên cam <- góc trên trái thoát menu phụ",
+      "file": "nav_back.png",
+      "anchor": "LEFT",
+      "phoneNative": false,
+      "roi": { "x": 2, "y": 2, "w": 90, "h": 82 },
+      "threshold": 0.80,
+      "maxColorDiff": 45,
+      "tapOffset": { "dx": 0, "dy": 0 }
+    },
+    "btn_b_glyph": {
+      "label": "Chữ B tâm nút chuyền (tự căn tâm nút & bóng chết)",
+      "file": "btn_b_glyph.png",
+      "anchor": "RIGHT",
+      "phoneNative": false,
+      "roi": { "x": 1005, "y": 612, "w": 78, "h": 76 },
+      "threshold": 0.65,
+      "maxColorDiff": 180,
+      "tapOffset": { "dx": 0, "dy": 0 }
+    },
+    "btn_a_glyph": {
+      "label": "Chữ A tâm nút sút (tự căn tâm nút & bóng chết)",
+      "file": "btn_a_glyph.png",
+      "anchor": "RIGHT",
+      "phoneNative": false,
+      "roi": { "x": 1155, "y": 612, "w": 78, "h": 76 },
+      "threshold": 0.65,
+      "maxColorDiff": 180,
+      "tapOffset": { "dx": 0, "dy": 0 }
+    },
+    "cutscene_skip": {
+      "label": "Nút Tap to skip khi xem hoạt ảnh / Replay",
+      "file": "cutscene_skip.png",
+      "anchor": "RIGHT",
+      "phoneNative": false,
+      "roi": { "x": 680, "y": 530, "w": 580, "h": 185 },
+      "threshold": 0.80,
+      "maxColorDiff": 55,
+      "tapOffset": { "dx": 0, "dy": 0 }
+    },
+    "in_match_hud": {
+      "label": "Nút Tạm dừng || góc trên trái khi bóng đang lăn",
+      "file": "in_match_hud.png",
+      "anchor": "LEFT",
+      "phoneNative": false,
+      "roi": { "x": 0, "y": 0, "w": 92, "h": 82 },
+      "threshold": 0.75,
+      "maxColorDiff": 95,
+      "tapOffset": { "dx": 0, "dy": 0 }
+    }
+  }
+}

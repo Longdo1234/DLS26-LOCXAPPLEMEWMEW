@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">DLS Auto Pro</string>
+    <string name="copyright_line_1">Bản quyền thuộc về Apple Mew Mew</string>
+    <string name="copyright_line_2">Mọi tính năng đều miễn phí</string>
+    <string name="accessibility_label">DLS Auto - AI Đa Điểm (Apple Mew Mew)</string>
+    <string name="accessibility_desc">Hỗ trợ tự động điều khiển cảm ứng đa điểm 2 ngón (Joystick + nút lực A/B/C) để treo đá Offline với máy trong Dream League Soccer. Bản quyền thuộc về Apple Mew Mew - Mọi tính năng đều miễn phí.</string>
+</resources>

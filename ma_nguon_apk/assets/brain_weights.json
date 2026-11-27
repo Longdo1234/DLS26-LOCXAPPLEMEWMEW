@@ -1,0 +1,66 @@
+{
+  "updatedAt": "2026-11-26T10:54:31.195Z",
+  "stats": {
+    "totalUpdates": 576,
+    "positiveOutcomes": 498,
+    "shotsTaken": 82,
+    "passChainsCompleted": 106
+  },
+  "qTable": {
+    "own_box_build": {
+      "pass_to_teammate": 0.3669,
+      "dribble_corridor": 0.2273
+    },
+    "build_up_open": {
+      "dribble_corridor": 0.84,
+      "pass_to_teammate": 0.8,
+      "killer_through_pass": 0.78
+    },
+    "build_up_pressured": {
+      "pass_to_teammate": 0.6356,
+      "dribble_corridor": 0.0697
+    },
+    "midfield_open": {
+      "dribble_corridor": 1.0002,
+      "pass_to_teammate": 0.2872,
+      "killer_through_pass": 0.8219,
+      "knock_on_burst": 0.72
+    },
+    "midfield_pressured": {
+      "pass_to_teammate": 0.5127,
+      "killer_through_pass": 0.8131,
+      "dribble_corridor": 0.4052
+    },
+    "counter_attack_space": {
+      "dribble_corridor": 0.3566,
+      "killer_through_pass": 0.9,
+      "pass_to_teammate": 0.6134,
+      "knock_on_burst": 0.85
+    },
+    "box_approach_play": {
+      "killer_through_pass": 0.9,
+      "pass_to_teammate": 0.6159,
+      "dribble_corridor": 0.9916,
+      "sweaty_cutback_b": 0.7326
+    },
+    "final_third_wing": {
+      "dribble_corridor": 0.3263,
+      "sweaty_cutback_b": 0.9589,
+      "pass_to_teammate": 0.5975
+    },
+    "byline_cutback_zone": {
+      "sweaty_cutback_b": 0.7625,
+      "wing_cross_c": 0.8399,
+      "dribble_corridor": 0.8125
+    },
+    "final_third_center": {
+      "shoot_goal_a": 1.1077,
+      "placed_shot_b": 0.8667,
+      "sweaty_cutback_b": 0.88
+    },
+    "one_on_one_keeper": {
+      "placed_shot_b": 1.0636,
+      "shoot_goal_a": 0.9123
+    }
+  }
+}
